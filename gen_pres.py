@@ -84,65 +84,64 @@ def get_typeform_data():
     final_table.columns = ['answer', 'question']
     return final_table
 
-
-df = get_typeform_data()
+def getpptx():
+    df = get_typeform_data()
 # пример круговой диаграммы
 
-tmp = df.loc[pd.Index(['Hx0Y0ufJuFB1'])].groupby(['answer']).count().reset_index()
+    tmp = df.loc[pd.Index(['Hx0Y0ufJuFB1'])].groupby(['answer']).count().reset_index()
 
-fig = go.Figure(data=[go.Pie(labels=tmp['answer'].tolist(), values=tmp['question'].tolist())])
-fig.write_image("img.png")
+    fig = go.Figure(data=[go.Pie(labels=tmp['answer'].tolist(), values=tmp['question'].tolist())])
+    fig.write_image("img.png")
 
 # пример гистограммы
 
-tmp = df.loc[pd.Index(['l7AsgL0PJ32Q'])].groupby(['answer']).count().reset_index()
+    tmp = df.loc[pd.Index(['l7AsgL0PJ32Q'])].groupby(['answer']).count().reset_index()
 
-dt = px.data.tips()
-fig = px.histogram(tmp, x="answer")
-fig.show()
-fig.write_image("hist.png")
+    dt = px.data.tips()
+    fig = px.histogram(tmp, x="answer")
+    fig.show()
+    fig.write_image("hist.png")
 
 # Генерируем презентацию
 
-title='Содержание отчета'
-prs = Presentation()
+    title='Содержание отчета'
+    prs = Presentation()
 
     # front page
     #-----------------------------------------------------------------------------------------------------------------------
-slide = prs.slides.add_slide(prs.slide_layouts[6])
-prs.slide_width = Inches(16)
-prs.slide_height = Inches(9)
+    slide = prs.slides.add_slide(prs.slide_layouts[6])
+    prs.slide_width = Inches(16)
+    prs.slide_height = Inches(9)
 
 
 
-shape = slide.shapes.add_shape(
-        MSO_SHAPE.RECTANGLE, 0, Inches(9/1.5),Inches(16),Inches(9/8.5)
-)
-shape.shadow.inherit = False
-fill=shape.fill
-fill.solid()
-shape.text= title
+    shape = slide.shapes.add_shape(
+            MSO_SHAPE.RECTANGLE, 0, Inches(9/1.5),Inches(16),Inches(9/8.5)
+    )
+    shape.shadow.inherit = False
+    fill=shape.fill
+    fill.solid()
+    shape.text= title
 #-----------------------------------------------------------------------------------------------------------------------
 
     #Page 2
     #-----------------------------------------------------------------------------------------------------------------------
-slide = prs.slides.add_slide(prs.slide_layouts[6])
+    slide = prs.slides.add_slide(prs.slide_layouts[6])
 
-shape = slide.shapes.add_shape(
-        MSO_SHAPE.RECTANGLE, 0, Inches(0.5),Inches(16),Inches(0.3))
-shape.shadow.inherit = False
-fill=shape.fill
-fill.solid()
-fill.fore_color.rgb=RGBColor(255,0,0)
-shape.text= "More people analytics"
-line=shape.line
-line.color.rgb=RGBColor(255,0,0)
+    shape = slide.shapes.add_shape(
+            MSO_SHAPE.RECTANGLE, 0, Inches(0.5),Inches(16),Inches(0.3))
+    shape.shadow.inherit = False
+    fill=shape.fill
+    fill.solid()
+    fill.fore_color.rgb=RGBColor(255,0,0)
+    shape.text= "More people analytics"
+    line=shape.line
+    line.color.rgb=RGBColor(255,0,0)
 
-left = Inches(1)
-top = Inches(2)
-width = Inches(7)
-pic = slide.shapes.add_picture('img.png', left, top, width=width)
-left = Inches(8)
-pic = slide.shapes.add_picture('hist.png', left, top, width=width)
-
-prs.save('typeform_presentation.pptx')
+    left = Inches(1)
+    top = Inches(2)
+    width = Inches(7)
+    pic = slide.shapes.add_picture('img.png', left, top, width=width)
+    left = Inches(8)
+    pic = slide.shapes.add_picture('hist.png', left, top, width=width)
+    prs.save('typeform_presentation.pptx')
